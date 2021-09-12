@@ -8,17 +8,6 @@ let s:indicator_checking    = get(g:, 'lightline#lsp#indicator_checking', 'Linti
 """"""""""""""""""""""
 " Lightline components
 
-" diagnostics status
-function! s:status_print(type, indicator) abort
-  if !lightline#lsp#linted()
-    return ''
-  endif
-  " { 'error': 1, 'warning': 0, 'information': 0, 'hint': 0 }
-  let l:counts = lsp#get_buffer_diagnostics_counts()
-  let l:count = l:counts[a:type]
-  return l:count == 0 ? '' : printf(a:indicator . '%d', l:count)
-endfunction
-
 function! lightline#lsp#error() abort
   return s:status_print('error', s:indicator_error)
 endfunction
@@ -35,14 +24,19 @@ function! lightline#lsp#hint() abort
   return s:status_print('hint', s:indicator_hint)
 endfunction
 
+function! lightline#lsp#checking() abort
+  return s:is_checking() ? s:indicator_checking : ''
+endfunction
+
 function! lightline#lsp#count() abort
-  if !lightline#lsp#linted()
+  if !s:lint_enabled()
     return ''
   endif
-  " { 'error': 1, 'warning': 0, 'information': 0, 'hint': 0 }
-  let l:counts = lsp#get_buffer_diagnostics_counts()
-  let l:total_count = l:counts.error + l:counts.warning + l:counts.information + l:counts.hint
-  return l:total_count == 0 ? '' : printf('%s %s %s %s',
+  if s:is_checking()
+    return s:indicator_checking
+  endif
+  let l:counts = s:get_count()
+  return l:counts['total'] == 0 ? '' : printf('%s %s %s %s',
     \ printf(s:indicator_error       . '%d', l:counts['error']),
     \ printf(s:indicator_warning     . '%d', l:counts['warning']),
     \ printf(s:indicator_information . '%d', l:counts['information']),
@@ -50,21 +44,14 @@ function! lightline#lsp#count() abort
 endfunction
 
 function! lightline#lsp#ok() abort
-  if !lightline#lsp#linted()
+  if !s:lint_enabled()
     return ''
   endif
-  " { 'error': 1, 'warning': 0, 'information': 0, 'hint': 0 }
-  let l:counts = lsp#get_buffer_diagnostics_counts()
-  let l:total_count = l:counts.error + l:counts.warning + l:counts.information + l:counts.hint
-  return l:total_count == 0 ? s:indicator_ok : ''
+  let l:counts = s:get_count()
+  return l:counts['total'] == 0 ? s:indicator_ok : ''
 endfunction
 
-function! lightline#lsp#checking() abort
-  " currently lsp server status API nothing.
-  return v:false ? s:indicator_checking : ''
-endfunction
-
-" server(whitelist first item) status
+" server status
 " use undocumented API
 let s:server_status = {
           \ 'unknown server' : 'warning',
@@ -87,6 +74,49 @@ function! lightline#lsp#status_error() abort
   return s:lsp_status('error')
 endfunction
 
+""""""""""""""""""
+" Helper functions
+
+" lint status
+function! s:lint_enabled() abort
+  return get(g:, 'lsp_diagnostics_enabled', 0)
+endfunction
+
+" diagnostics current status
+if exists('*lsp#get_progress')
+  function! s:is_checking() abort
+    let lsp_progress = lsp#get_progress()
+    return !empty(lsp_progress)
+  endfunction
+else
+  function! s:is_checking() abort
+    return v:false
+  endfunction
+endif
+
+" get diagnostics count info
+function! s:get_count() abort
+  " { 'error': 1, 'warning': 0, 'information': 0, 'hint': 0 }
+  let counts = lsp#get_buffer_diagnostics_counts()
+  let values = values(counts)
+  let counts['total'] = 0
+  for i in values
+    let counts['total'] = counts['total'] + i
+  endfor
+  return counts
+endfunction
+
+" diagnostics status print
+function! s:status_print(type, indicator) abort
+  if !s:lint_enabled()
+    return ''
+  endif
+  let l:counts = s:get_count()
+  let l:count = l:counts[a:type]
+  return l:count == 0 ? '' : printf(a:indicator . '%d', l:count)
+endfunction
+
+# lsp server status
 function! s:lsp_status(type) abort
   let servers = lsp#get_allowed_servers()
 
@@ -109,13 +139,4 @@ function! s:lsp_status(type) abort
     return server_name . ':' .  status
   endif
   return ''
-endfunction
-
-""""""""""""""""""
-" Helper functions
-
-function! lightline#lsp#linted() abort
-  " currently vim-lsp enabled check API nothing.
-  " currently lsp server status API nothing.
-  return get(g:, 'lsp_diagnostics_enabled', 0)
 endfunction
