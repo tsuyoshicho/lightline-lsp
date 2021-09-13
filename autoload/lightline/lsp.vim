@@ -116,7 +116,7 @@ function! s:status_print(type, indicator) abort
   return l:count == 0 ? '' : printf(a:indicator . '%d', l:count)
 endfunction
 
-# lsp server status
+" lsp server status
 function! s:lsp_status(type) abort
   let servers = lsp#get_allowed_servers()
 
