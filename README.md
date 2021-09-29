@@ -6,8 +6,8 @@ Forked from [lightline-ale](https://github.com/maximbaz/lightline-ale).
 
 ## Current project status
 
-- [ ] diagnostics : not work
-- [x] server      : work
+- [x] diagnostics count/status :  work
+- [x] server status            : work
 
 ## Table Of Contents
 
@@ -124,7 +124,7 @@ The following icons from the Font Awesome font are used in the lightline-ale:
 - Checking: [f110](https://fontawesome.com/icons/spinner)
 - Warnings: [f071](https://fontawesome.com/icons/exclamation-triangle)
 - Errors: [f05e](https://fontawesome.com/icons/ban)
-- OK: [f00c](https://fontawesome.com/icons/check) (although I prefer to disable this component)
+- OK: [f00c](https://fontawesome.com/icons/check)
 
 To specify icons in the configuration, use their unicode codes as `"\uXXXX"` (make sure to wrap them in double quotes). Alternatively copy the icons from a font website, or type <kbd>\<C-v\>u\<4-digit-unicode\></kbd> or <kbd>\<C-v\>U\<8-digit-unicode\></kbd> to insert the literal characters.
 
