@@ -79,7 +79,7 @@ endfunction
 
 " lint status
 function! s:lint_enabled() abort
-  return get(g:, 'lsp_diagnostics_enabled', 0)
+  return get(g:, 'lsp_diagnostics_enabled', 0) && !empty(lsp#get_allowed_servers())
 endfunction
 
 " diagnostics current status
