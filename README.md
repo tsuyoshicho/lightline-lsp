@@ -32,65 +32,90 @@ call dein#add('tsuyoshicho/lightline-lsp')
 
 ### 1. Register the components
 
+NOTE: "diagnostics progress & all" components register to `expand` or `function`.
+
 ```viml
 " init
 " let g:lightline = {}
 
-" diagnostics
-" already previous setting exists, you would be using expand() function to  dictionary expand.
-let g:lightline.component_expand = {
-      \  'lsp_diag_checking' : 'lightline#lsp#checking',
-      \  'lsp_diag_error'    : 'lightline#lsp#error',
-      \  'lsp_diag_warning'  : 'lightline#lsp#warning',
-      \  'lsp_diag_info'     : 'lightline#lsp#information',
-      \  'lsp_diag_error'    : 'lightline#lsp#hint',
-      \  'lsp_diag_ok'       : 'lightline#lsp#ok',
-      \}
+" already previous setting exists, you would be using expand() function to dictionary expand.
 
-" server
-" same above.
+" server status
 let g:lightline.component_expand = {
       \  'lsp_status_error'     : 'lightline#lsp#status_error',
       \  'lsp_status_warning'   : 'lightline#lsp#status_warning',
       \  'lsp_status_ok'        : 'lightline#lsp#status_ok',
       \}
 
-" count indicator
+" diagnostics
+" progress & all ok
+let g:lightline.component_expand = {
+      \   'lsp_diag_checking' : 'lightline#lsp#checking',
+      \   'lsp_diag_ok'       : 'lightline#lsp#ok',
+      \}
+
+" diagnostics
+" count indicator(all / split)
 let g:lightline.component_function = {
-      \   'lsp_count':    'lightline#lsp#count',
+      \   'lsp_diag_count'    : 'lightline#lsp#count',
+      \   'lsp_diag_error'    : 'lightline#lsp#error',
+      \   'lsp_diag_warning'  : 'lightline#lsp#warning',
+      \   'lsp_diag_info'     : 'lightline#lsp#information',
+      \   'lsp_diag_hint'     : 'lightline#lsp#hint',
       \}
 ```
 
 ### 2. Set color to the components
 
-```viml
-" diagnostics
-" already previous setting exists, you would be using expand() function to  dictionary expand.
-let g:lightline.component_type = {
-      \  'lsp_diag_checking' : 'left',
-      \  'lsp_diag_warnings' : 'warning',
-      \  'lsp_diag_errors'   : 'error',
-      \  'lsp_diag_ok'       : 'left',
-      \}
+Expand component is needed for `component_type`.
 
-" server
-" same above.
+NOTE: if "diagnostics progress & all" components registration to `function`, do not need `component_type` define.
+
+```viml
+
+" already previous setting exists, you would be using expand() function to dictionary expand.
+
+" server status
 let g:lightline.component_type = {
       \  'lsp_status_error'   : 'error',
       \  'lsp_status_warning' : 'warning',
       \  'lsp_status_ok'      : 'ok',
+      \}
+
+" diagnostics
+" progress & all ok
+let g:lightline.component_type = {
+      \  'lsp_diag_checking' : 'ok',
+      \  'lsp_diag_ok'       : 'ok',
       \}
 ```
 
 ### 3. Add the components to the lightline, for example to the right side
 
 ```viml
-" diagnostics and server
-" already previous setting exists, you would be using expand() function to  dictionary expand.
+" already previous setting exists, you would be using expand() function to dictionary expand.
+
+" server status
 let g:lightline.active = { 'right': [
       \  ['lsp_status_error', 'lsp_status_warning', 'lsp_status_ok'],
-      \  ['lsp_count'],
-      \  ['lsp_diag_checking', 'lsp_diag_errors', 'lsp_diag_warnings', 'lsp_diag_ok'],
+      \]}
+
+" diagnostics
+" progress & all ok
+let g:lightline.active = { 'right': [
+      \  ['lsp_diag_checking', 'lsp_diag_ok'],
+      \]}
+
+" diagnostics
+" count indicator(all)
+let g:lightline.active = { 'right': [
+      \  ['lsp_diag_count'],
+      \]}
+
+" diagnostics
+" count indicator(split)
+let g:lightline.active = { 'right': [
+      \  ['lsp_diag_errors', 'lsp_diag_warnings', 'lsp_diag_info', 'lsp_diag_hint'],
       \]}
 ```
 
