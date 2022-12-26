@@ -1,28 +1,29 @@
 # lightline-lsp
 
-This plugin provides [vim-lsp](https://github.com/prabirshrestha/vim-lsp) indicator for the [lightline](https://github.com/itchyny/lightline.vim) vim plugin.
+This plugin provides [vim-lsp](https://github.com/prabirshrestha/vim-lsp) indicator for the [lightline.vim](https://github.com/itchyny/lightline.vim) statusline plugin.
 
 Forked from [lightline-ale](https://github.com/maximbaz/lightline-ale).
 
-## Current project status
-
-- [x] diagnostics count/status :  work
-- [x] server status            : work
-
 ## Table Of Contents
 
+- [Current project status](#current-project-status)
 - [Installation](#installation)
 - [Integration](#integration)
 - [Configuration](#configuration)
 - [License](#license)
+
+## Current project status
+
+- [x] diagnostics count/status : work
+- [x] server name/status       : work
 
 ## Installation
 
 Install using a plugin manager of your choice, for example:
 
 ```viml
-call dein#add('prabirshrestha/async.vim') " Dependency: linter async lib
-call dein#add('vim-lsp')                  " Dependency: linter
+call dein#add('prabirshrestha/async.vim') " Dependency: vim-lsp async lib
+call dein#add('vim-lsp')                  " Dependency: lsp client
 call dein#add('itchyny/lightline.vim')    " Dependency: status line
 call dein#add('tsuyoshicho/lightline-lsp')
 ```
@@ -38,12 +39,12 @@ call dein#add('tsuyoshicho/lightline-lsp')
 " diagnostics
 " already previous setting exists, you would be using expand() function to  dictionary expand.
 let g:lightline.component_expand = {
-      \  'linter_checking' : 'lightline#lsp#checking',
-      \  'linter_error'    : 'lightline#lsp#error',
-      \  'linter_warning'  : 'lightline#lsp#warning',
-      \  'linter_info'     : 'lightline#lsp#information',
-      \  'linter_error'    : 'lightline#lsp#hint',
-      \  'linter_ok'       : 'lightline#lsp#ok',
+      \  'lsp_diag_checking' : 'lightline#lsp#checking',
+      \  'lsp_diag_error'    : 'lightline#lsp#error',
+      \  'lsp_diag_warning'  : 'lightline#lsp#warning',
+      \  'lsp_diag_info'     : 'lightline#lsp#information',
+      \  'lsp_diag_error'    : 'lightline#lsp#hint',
+      \  'lsp_diag_ok'       : 'lightline#lsp#ok',
       \}
 
 " server
@@ -66,18 +67,18 @@ let g:lightline.component_function = {
 " diagnostics
 " already previous setting exists, you would be using expand() function to  dictionary expand.
 let g:lightline.component_type = {
-      \  'linter_checking': 'left',
-      \  'linter_warnings': 'warning',
-      \  'linter_errors': 'error',
-      \  'linter_ok': 'left',
+      \  'lsp_diag_checking' : 'left',
+      \  'lsp_diag_warnings' : 'warning',
+      \  'lsp_diag_errors'   : 'error',
+      \  'lsp_diag_ok'       : 'left',
       \}
 
 " server
 " same above.
 let g:lightline.component_type = {
-      \  'lsp_status_error'     : 'error',
-      \  'lsp_status_warning'   : 'warning',
-      \  'lsp_status_ok'        : 'ok',
+      \  'lsp_status_error'   : 'error',
+      \  'lsp_status_warning' : 'warning',
+      \  'lsp_status_ok'      : 'ok',
       \}
 ```
 
@@ -89,7 +90,7 @@ let g:lightline.component_type = {
 let g:lightline.active = { 'right': [
       \  ['lsp_status_error', 'lsp_status_warning', 'lsp_status_ok'],
       \  ['lsp_count'],
-      \  [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ],
+      \  ['lsp_diag_checking', 'lsp_diag_errors', 'lsp_diag_warnings', 'lsp_diag_ok'],
       \]}
 ```
 
@@ -133,7 +134,7 @@ See the code points here:
 - [Font Awesome](https://fontawesome.com/icons)
 - [Nerd Fonts](https://github.com/ryanoasis/nerd-fonts#glyph-sets)
 
-Here's the configuration snippet used in the lightline-ale:
+Here's the configuration snippet used in the lightline-lsp(same as lightline-ale):
 
 ```viml
 let g:lightline#lsp#indicator_checking = "\uf110"
