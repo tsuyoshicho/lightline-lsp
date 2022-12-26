@@ -133,13 +133,21 @@ The indicator to use when there are warnings. Default is `W:`.
 
 The indicator to use when there are errors. Default is `E:`.
 
+### `g:lightline#lsp#indicator_information`
+
+The indicator to use when there are information. Default is `I:`.
+
+### `g:lightline#lsp#indicator_hint`
+
+The indicator to use when there are hint. Default is `H:`.
+
 ### `g:lightline#lsp#indicator_ok`
 
 The indicator to use when there are no warnings or errors. Default is `OK`.
 
 ### `g:lightline#lsp#server_interval`
 
-This interval as servers cycle status indicatation(sec).
+This interval as servers cycle status indicatation(sec). Default is 30 sec.
 
 ### Using icons as indicators
 
