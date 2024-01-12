@@ -115,7 +115,7 @@ let g:lightline.active = { 'right': [
 " diagnostics
 " count indicator(split)
 let g:lightline.active = { 'right': [
-      \  ['lsp_diag_errors', 'lsp_diag_warnings', 'lsp_diag_info', 'lsp_diag_hint'],
+      \  ['lsp_diag_error', 'lsp_diag_warning', 'lsp_diag_info', 'lsp_diag_hint'],
       \]}
 ```
 
